@@ -122,8 +122,8 @@ def op8(index, mode1, mode2):
 with open('D:\Projects\AdventOfCode\day7-test.txt', 'r') as fp:
 	phasePerm = permutations([5,6,7,8,9])
 	phasePerm = [[9,8,7,6,5]]
-	input = 0
-	output = 0
+	input = [0,0,0,0,0]
+	output = [0,0,0,0,0]
 	biggestOut = 0
 	line = fp.readline()
 	posOrig = line.split(',')
@@ -137,12 +137,12 @@ with open('D:\Projects\AdventOfCode\day7-test.txt', 'r') as fp:
 	posA[3] = posOrig
 	posA[4] = posOrig
 	for phase in phasePerm:
-		input = 0
+		#input = 0
 		for p in phase:
 			pos = posA[amp]
-			in1 = p
-			in2 = input
-			inputN = 0
+			in1 = phasePerm[0][amp]
+			in2 = input[amp]
+			inputN = [0,0,0,0,0]
 			#print("PHASE: " + str(p) + " INPUT: " + str(input))
 			opN[amp] = 0
 			index = 0
@@ -155,7 +155,7 @@ with open('D:\Projects\AdventOfCode\day7-test.txt', 'r') as fp:
 					amp += 1
 					if amp == 5:
 						amp = 0
-				print(pos)
+				pos = posA[amp]
 				#print(amp)
 				#print(opnumber)
 				#print(opnumber[amp])
@@ -178,18 +178,20 @@ with open('D:\Projects\AdventOfCode\day7-test.txt', 'r') as fp:
 					opnumber[amp] = op2(opnumber[amp], mode1, mode2)
 				elif opcode == 3:
 					#print("OPNUM " + str(opN) + " OPCODE3: Input: " + str(input))
-					if inputN == 0:
-						opnumber[amp] = op3(opnumber[amp], in1)
-						inputN += 1
+					if inputN[amp] == 0:
+						opnumber[amp] = op3(opnumber[amp], phasePerm[0][amp])
+						inputN[amp] += 1
 					else:
-						opnumber[amp] = op3(opnumber[amp], in2)
+						opnumber[amp] = op3(opnumber[amp], input[amp])
 				elif opcode == 4:
-					opnumber[amp], output = op4(opnumber[amp], mode1)
-					print(str(output) + " at OPNUMBER" + str(opN) + " From pos " + str(opnumber[amp]) + " AMP: " + str(amp) + " Mode1: " + str(mode1))
-					posA[amp] = pos
+					opnumber[amp], ot = op4(opnumber[amp], mode1)
+					print(str(ot) + " at OPNUMBER" + str(opN) + " From pos " + str(opnumber[amp]) + " AMP: " + str(amp) + " Mode1: " + str(mode1))
+					print(pos[amp])
+					#posA[amp] = pos
 					amp += 1
 					if amp == 5:
 						amp = 0
+					input[amp]=ot
 				elif opcode == 5:
 					print("OPNUM " + str(opN) + " OPCODE5: Mode1: " + str(mode1) + " Mode2: " + str(mode2) + "Index before: " + str(opnumber[amp]))
 					opnumber[amp] = op5(opnumber[amp], mode1, mode2)
@@ -209,9 +211,9 @@ with open('D:\Projects\AdventOfCode\day7-test.txt', 'r') as fp:
 					continue
 				#print(pos)
 				opN[amp] += 1
-			if output > biggestOut:
-				biggestOut = output
+			if ot > biggestOut:
+				biggestOut = ot
 			#print(output)
-			input = output
+			#input = output
 	print(biggestOut)
 				
